@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
+using System.Web.Http.Cors;
 
 namespace MyPhoneBook
 {
@@ -25,6 +26,11 @@ namespace MyPhoneBook
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+                    var cors = new EnableCorsAttribute(
+            origins: "*", 
+            headers: "*", 
+            methods: "*");
+        config.EnableCors(cors);
         }
     }
 }
