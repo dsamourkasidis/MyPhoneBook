@@ -11,9 +11,11 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using MyPhoneBook.Models;
 using Microsoft.AspNet.Identity;
+using MyPhoneBook.Controllers;
 
 namespace MyPhoneBook.Controllers
 {
+    [Authorize]
     public class ContactsController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -82,8 +84,9 @@ namespace MyPhoneBook.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var user_connected = User.Identity.GetUserId();
-            contact.User.Id = user_connected;
+            var user_id = User.Identity.GetUserId();
+            ApplicationUser user = await UserManager
+            contact.User = User.Identity.ToString;
             db.Contacts.Add(contact);
             await db.SaveChangesAsync();
 
