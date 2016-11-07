@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="Content/Site.css" />
+    <script src="Scripts/jquery-1.10.2.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"  ></script>
+</head>
+<body ng-app="PhoneBookapp">
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container-fluid" ng-controller="IndexCtrl">
+            <div class="navbar-header">
+                <a href="#/" class="navbar-left"><img src="Content/download (2).jpg" width="60"></a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="#/Contacts">My Contacts</a> </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right"   >
+                <li ng-show="del" class="alert alert-success" role="alert">{{del}}</li>
+                <li ng-hide="log.isAuth"><a href="#/Register">Register</a></li>
+                <li ng-hide="!log.isAuth"><a href="">Welcome {{log.userName}}</a></li>
+                <li ng-hide="!log.isAuth"><a href="" ng-click="Delete()">Delete my account</a></li>
+                <li  ng-hide="log.isAuth" ><a href="#/Login">Login</a> </li>
+                <li  ng-hide="!log.isAuth"> <a href="" ng-click="Logout()">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div ng-view="">
+        </div>
+    </div>
+    <!--Scripts-->
+    <script src="Scripts/angular.min.js"></script>
+    <script src="Scripts/angular-route.min.js"></script>
+    <script src="Scripts/angular-local-storage.js"></script>
+    <script src="Scripts/ui-bootstrap-tpls-2.2.0.min.js"></script>
+    <!--Modules-->
+    <script src="App.js"></script>
+    <!--Controllers-->
+    <script src="Controllers/HomeCtrl.js"></script>
+    <script src="Controllers/RegisterCtrl.js"></script>
+    <script src="Controllers/LoginCtrl.js"></script>
+    <script src="Controllers/ContactCtrl.js"></script>
+    <script src="Controllers/IndexCtrl.js"></script>
+    <!--Services-->
+    <script src="Services/AuthService.js"></script>
+    <script src="Services/ContactService.js"></script>
+</body>
+</html>

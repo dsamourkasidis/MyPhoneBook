@@ -27,6 +27,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebSite1(1)", "..\..\WebSit
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "MyPhoneBook.Azure1", "MyPhoneBook.Azure1\MyPhoneBook.Azure1.ccproj", "{65C798ED-FDD4-4AFD-B5EF-111DB83457BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{CBE28F0B-42E6-4E7C-81AA-9F68B063F24D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBE28F0B-42E6-4E7C-81AA-9F68B063F24D}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{CBE28F0B-42E6-4E7C-81AA-9F68B063F24D}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{65C798ED-FDD4-4AFD-B5EF-111DB83457BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65C798ED-FDD4-4AFD-B5EF-111DB83457BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65C798ED-FDD4-4AFD-B5EF-111DB83457BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65C798ED-FDD4-4AFD-B5EF-111DB83457BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -51,12 +51,14 @@ namespace MyPhoneBook.Controllers
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
-        //Get api/Account/DeleteUser
+        //DELETE api/Account/DeleteUser
         [Route("DeleteUser")]
         public async Task<IHttpActionResult> DeleteUser()
         {
-            ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            IdentityResult result = await UserManager.DeleteAsync(user);
+            //  ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            IdentityUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            ApplicationUser user2 = UserManager.FindByEmail(user.Email);
+            IdentityResult result = await UserManager.DeleteAsync(user2);
 
             if (!result.Succeeded)
             {

@@ -55,7 +55,8 @@ namespace MyPhoneBook.Controllers
             }
 
             db.Entry(contact).State = EntityState.Modified;
-
+            var user_connected = User.Identity.GetUserId();
+            contact.UserId = user_connected;
             try
             {
                 await db.SaveChangesAsync();
@@ -105,6 +106,16 @@ namespace MyPhoneBook.Controllers
             await db.SaveChangesAsync();
 
             return Ok(contact);
+        }
+
+        //DELETE: api/Contacts
+        public async Task<IHttpActionResult> DeleteContacts()
+        {
+            var userid = User.Identity.GetUserId();
+            var contacts = db.Contacts.Where(u => u.User.Id == userid);
+            db.Contacts.RemoveRange(contacts);
+            await db.SaveChangesAsync();
+            return Ok();
         }
 
         protected override void Dispose(bool disposing)
