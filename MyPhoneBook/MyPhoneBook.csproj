@@ -228,6 +228,10 @@
     <Compile Include="Migrations\201610211840042_relate_userid_to_contacts.Designer.cs">
       <DependentUpon>201610211840042_relate_userid_to_contacts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201610241511193_Adduserid.cs" />
+    <Compile Include="Migrations\201610241511193_Adduserid.Designer.cs">
+      <DependentUpon>201610241511193_Adduserid.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -241,6 +245,7 @@
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.mindef.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -312,6 +317,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610211840042_relate_userid_to_contacts.resx">
       <DependentUpon>201610211840042_relate_userid_to_contacts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610241511193_Adduserid.resx">
+      <DependentUpon>201610241511193_Adduserid.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

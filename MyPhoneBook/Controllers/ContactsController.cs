@@ -11,7 +11,6 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using MyPhoneBook.Models;
 using Microsoft.AspNet.Identity;
-using MyPhoneBook.Controllers;
 
 namespace MyPhoneBook.Controllers
 {
@@ -25,7 +24,7 @@ namespace MyPhoneBook.Controllers
         {
             var userid = User.Identity.GetUserId();
             var contacts = db.Contacts.Where(u => u.User.Id == userid);
-            return contacts;
+            return contacts.AsQueryable();
         }
 
         // GET: api/Contacts/5
@@ -84,9 +83,8 @@ namespace MyPhoneBook.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var user_id = User.Identity.GetUserId();
-            ApplicationUser user = await UserManager
-            contact.User = User.Identity.ToString;
+            var user_connected = User.Identity.GetUserId();
+            contact.UserId = user_connected;
             db.Contacts.Add(contact);
             await db.SaveChangesAsync();
 
