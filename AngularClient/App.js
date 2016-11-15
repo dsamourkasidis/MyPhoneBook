@@ -18,10 +18,14 @@ PhoneBookapp.config(function ($routeProvider) {
         templateUrl: '/Views/Contacts.html',
         controller: 'ContactCtrl'
     })
+            .when('/callback', {
+                templateUrl: '/Views/callback.html',
+                controller: 'callbackCtrl'
+            })
     .otherwise({
         redirectTo: '/'
     });
-
+    
 });
 
 PhoneBookapp.config(function (localStorageServiceProvider) {

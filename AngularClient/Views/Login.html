@@ -28,5 +28,11 @@
             </div>
         </form>
     </div>
+        <div class="col-md-4">
+            <h2>Login with Google</h2>
+            <button class="btn btn-block btn-social btn-google" ng-click="google()"><span class="fa fa-google">
+                </span> Sign in with Google </button>
+            <div ng-show="status" class="alert alert-success" role="alert">{{status}}</div>
+        </div>
 </body>
 </html>

@@ -53,6 +53,9 @@
                         <th>
                             <h4>Phone Number</h4>
                         </th>
+                        <th>
+                            <h4>Email</h4>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,6 +75,10 @@
                         <td class="col-md-2 col-sm-2">
                             <p ng-show="edit">{{contact.PhoneNumber}}</p>
                             <input class="col-xs-9" type="text" ng-init="newcontact.PhoneNumber = contact.PhoneNumber" ng-model="newcontact.PhoneNumber" ng-hide="edit" /> 
+                        </td>
+                        <td class="col-md-2 col-sm-2">
+                            <p ng-show="edit">{{contact.Email}}</p>
+                            <input class="col-xs-9" type="text" ng-init="newcontact.Email = contact.Email" ng-model="newcontact.Email" ng-hide="edit" />
                         </td>
                         <td class="col-md-1 col-sm-1" style="text-align:center">
                             <button type="button" class="btn-success" ng-hide="edit" ng-click="editok(newcontact,contact)">
@@ -94,7 +101,7 @@
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >      
         <form name="AddContactForm" ng-submit="add()">
             <fieldset>
-                <div class="form-group col-xs-7 col-md-offset-2">
+                <div class="form-group col-xs-9 col-md-offset-2">
                     <h2>Add a new Contact</h2>
                     <div ng-hide="added == '' " class="alert alert-dismissible alert-success">
                         <a href="#" class="alert-link">{{added}}</a>    
@@ -113,6 +120,10 @@
                     <div class="form-group">
                         <label class="control-label col-md-4 col-sm-1" for="Pnumber">Phone Number</label>
                         <input type="number" class="form-control" id="Pnumber" ng-model="newcontact.pnumber" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-1" for="Email">Email</label>
+                        <input type="email" class="form-control" id="Email" ng-model="newcontact.email" />
                     </div>
                     <button type="submit" class="btn btn-default" ng-disabled="AddContactForm.$invalid">Add</button>
                 </div>

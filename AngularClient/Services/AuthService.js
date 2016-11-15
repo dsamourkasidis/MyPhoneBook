@@ -1,5 +1,5 @@
 ﻿PhoneBookapp.factory('AuthService', ['$http', 'localStorageService',function ($http, localStorageService) {
-    var baseurl = 'http://localhost:56352';
+    var baseurl = 'https://localhost:44355';
     var authServiceFactory = {};
     var _authentication = {
         isAuth: false,
@@ -30,7 +30,8 @@
             headers: { 'Content-type': 'application/x-www-form-urlencoded' }
         });
         promise.success(function (r) {
-            localStorageService.set('authdata', { token: r.access_token, userName: user.email });
+            localStorageService.set('authtoken', { token: r.access_token});
+            localStorageService.set('authuser', { userName: user.email });
             _authentication.isAuth = true;
             _authentication.userName = user.email;
         });
@@ -39,7 +40,8 @@
 
     //Logout by removing the token from localstorage
         var _Logout = function () {
-            localStorageService.remove('authdata');
+            localStorageService.remove('authtoken');
+            localStorageService.remove('authuser');
             _authentication.isAuth = false;
             _authentication.userName = "";
         };
@@ -50,7 +52,7 @@
             return $http({
                 method: 'DELETE',
                 url: baseurl + '/api/Contacts/',
-                headers: { Authorization: 'Bearer ' + localStorageService.get('authdata').token }
+                headers: { Authorization: 'Bearer ' + localStorageService.get('authtoken').token }
             });
         }
 
@@ -59,15 +61,47 @@
             return $http({
                 method: 'DELETE',
                 url: baseurl + '/api/Account/DeleteUser',
-                headers: { Authorization: 'Bearer ' + localStorageService.get('authdata').token }
+                headers: { Authorization: 'Bearer ' + localStorageService.get('authtoken').token }
             })
         }
 
+    //Google Login
+    //Get Account info
+        var _info = function (access_token) {
+            var promise = $http({
+                method: 'GET',
+                url: baseurl + '/api/Account/UserInfo',
+                headers: { Authorization: 'Bearer ' + access_token }
+            });
+            promise.then(function (r) {
+                if (r.data.HasRegistered == true) {
+                    localStorageService.set('authuser', { userName: r.data.Email })
+                    _authentication.userName = r.data.Email;
+                    localStorageService.set('authtoken', { token: access_token });
+                    _authentication.isAuth = true;
+                }
+                });
+            return promise;
+        }
+    //RegisterExternalAccount
+        var _registerexternal = function (email,Authorization) {
+            var promise =  $http({
+                method: 'POST',
+                url: baseurl + '/api/Account/RegisterExternal',
+                headers: { Authorization: Authorization },
+                data : {Email : email}
+            });
+            promise.then(function (r) {
+
+            });
+            return promise;
+        }
+
         var _fillauth = function () {
-            var authdata = localStorageService.get('authdata');
+            var authdata = localStorageService.get('authtoken');
             if (authdata) {
                 _authentication.isAuth = true;
-                _authentication.userName = authdata.userName;
+                _authentication.userName =  localStorageService.get('authuser').userName;
             }
         };
         authServiceFactory.DeleteAccountContacts = _DeleteAccountContacts;
@@ -76,6 +110,8 @@
         authServiceFactory.Logout = _Logout;
         authServiceFactory.Login = _Login;
         authServiceFactory.Register = _Register;
+        authServiceFactory.info = _info;
+        authServiceFactory.registerexternal = _registerexternal;
         authServiceFactory.fillauth = _fillauth;
         return authServiceFactory;
 }]);

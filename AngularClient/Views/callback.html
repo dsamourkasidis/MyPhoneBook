@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <script>
+        var fragmentString = location.hash.substr(1);
+        var fragment = {};
+        var fragmentItemStrings = fragmentString.split('&');
+        for (var i in fragmentItemStrings) {
+            var fragmentItem = fragmentItemStrings[i].split('=');
+            if (fragmentItem.length !== 2) {
+                continue;
+            }
+            fragment[fragmentItem[0]] = fragmentItem[1];
+        }
+
+        window.opener.$windowScope.callback(fragment);
+
+        window.close();
+    </script>
+</body>
+</html>
