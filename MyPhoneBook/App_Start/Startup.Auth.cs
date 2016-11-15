@@ -10,6 +10,7 @@ using Microsoft.Owin.Security.OAuth;
 using Owin;
 using MyPhoneBook.Providers;
 using MyPhoneBook.Models;
+using System.Threading.Tasks;
 
 namespace MyPhoneBook
 {
@@ -32,7 +33,7 @@ namespace MyPhoneBook
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             // Configure the application for OAuth based flow
-            PublicClientId = "self";
+            PublicClientId = "phonebook";
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
                 TokenEndpointPath = new PathString("/Token"),
@@ -58,12 +59,27 @@ namespace MyPhoneBook
             //app.UseFacebookAuthentication(
             //    appId: "",
             //    appSecret: "");
-
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            var googleOptions = new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "827805986463-8c19bidsirnfqpvsqomm65kqttj3i8fi.apps.googleusercontent.com",
+                ClientSecret = "k_SQE6OU6dzhz7-0gmBpBQRl",
+                AccessType = "offline",
+                Provider = new GoogleOAuth2AuthenticationProvider()
+                {
+                    OnAuthenticated = context =>
+                    {
+                        context.Identity.AddClaim(new System.Security.Claims.Claim("Google_AccessToken", context.AccessToken));
+                        return Task.FromResult(0);
+                    }
+                },
+                SignInAsAuthenticationType = DefaultAuthenticationTypes.ExternalCookie
+            };
+            googleOptions.Scope.Add("email");
+            googleOptions.Scope.Add("https://www.googleapis.com/auth/plus.profile.emails.read");
+            googleOptions.Scope.Add("https://www.googleapis.com/auth/userinfo.email");
+            googleOptions.Scope.Add("https://www.googleapis.com/auth/plus.login");
+            googleOptions.Scope.Add("https://www.googleapis.com/auth/plus.me");
+            app.UseGoogleAuthentication(googleOptions);
         }
     }
 }

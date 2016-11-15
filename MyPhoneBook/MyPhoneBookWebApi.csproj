@@ -18,7 +18,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44355</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -281,6 +281,10 @@
     <Compile Include="Migrations\201610241511193_Adduserid.Designer.cs">
       <DependentUpon>201610241511193_Adduserid.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201611151114547_addedEmail.cs" />
+    <Compile Include="Migrations\201611151114547_addedEmail.Designer.cs">
+      <DependentUpon>201611151114547_addedEmail.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -376,6 +380,9 @@
     <EmbeddedResource Include="Migrations\201610241511193_Adduserid.resx">
       <DependentUpon>201610241511193_Adduserid.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611151114547_addedEmail.resx">
+      <DependentUpon>201611151114547_addedEmail.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -398,7 +405,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>62326</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:56352/</IISUrl>
+          <IISUrl>https://localhost:44355/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

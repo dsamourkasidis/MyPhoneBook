@@ -67,9 +67,6 @@ namespace MyPhoneBook.Controllers
 
             return Ok();
         }    
-    
-
-
 
         // GET api/Account/UserInfo
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
@@ -80,9 +77,11 @@ namespace MyPhoneBook.Controllers
 
             return new UserInfoViewModel
             {
-                Email = User.Identity.GetUserName(),
+                // Email = User.Identity.GetUserName(),
+                Email = externalLogin != null ? externalLogin.Email : User.Identity.GetUserName(),
                 HasRegistered = externalLogin == null,
-                LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
+                LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null,
+                Access_Token = externalLogin != null ? externalLogin.Access_Token : null
             };
         }
 
@@ -99,7 +98,7 @@ namespace MyPhoneBook.Controllers
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
         {
             IdentityUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-
+            var info = await AuthenticationManager_GetExternalLoginInfoAsync_WithExternalBearer();
             if (user == null)
             {
                 return null;
@@ -270,9 +269,9 @@ namespace MyPhoneBook.Controllers
                 return new ChallengeResult(provider, this);
             }
 
-            ApplicationUser user = await UserManager.FindAsync(new UserLoginInfo(externalLogin.LoginProvider,
-                externalLogin.ProviderKey));
-
+            // ApplicationUser user = await UserManager.FindAsync(new UserLoginInfo(externalLogin.LoginProvider,
+            //     externalLogin.ProviderKey));
+            ApplicationUser user = await UserManager.FindByEmailAsync(externalLogin.Email);
             bool hasRegistered = user != null;
 
             if (hasRegistered)
@@ -283,14 +282,14 @@ namespace MyPhoneBook.Controllers
                     OAuthDefaults.AuthenticationType);
                 ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
                     CookieAuthenticationDefaults.AuthenticationType);
-
-                AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
+                var acc = externalLogin.Access_Token;
+                AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName,acc);
                 Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
             }
             else
             {
                 IEnumerable<Claim> claims = externalLogin.GetClaims();
-                ClaimsIdentity identity = new ClaimsIdentity(claims, OAuthDefaults.AuthenticationType);
+               ClaimsIdentity identity = new ClaimsIdentity(claims, OAuthDefaults.AuthenticationType);
                 Authentication.SignIn(identity);
             }
 
@@ -364,6 +363,7 @@ namespace MyPhoneBook.Controllers
         [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("RegisterExternal")]
+        [System.Web.Http.AcceptVerbs("GET", "POST")]
         public async Task<IHttpActionResult> RegisterExternal(RegisterExternalBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -371,7 +371,7 @@ namespace MyPhoneBook.Controllers
                 return BadRequest(ModelState);
             }
 
-            var info = await Authentication.GetExternalLoginInfoAsync();
+            var info = await AuthenticationManager_GetExternalLoginInfoAsync_WithExternalBearer();
             if (info == null)
             {
                 return InternalServerError();
@@ -391,6 +391,28 @@ namespace MyPhoneBook.Controllers
                 return GetErrorResult(result); 
             }
             return Ok();
+        }
+
+        private async Task<ExternalLoginInfo> AuthenticationManager_GetExternalLoginInfoAsync_WithExternalBearer()
+        {
+            ExternalLoginInfo loginInfo = null;
+
+            var result = await Authentication.AuthenticateAsync(DefaultAuthenticationTypes.ExternalBearer);
+
+            if (result != null && result.Identity != null)
+            {
+                var token = result.Identity.FindFirst("Google_AccessToken");
+                var idClaim = result.Identity.FindFirst(ClaimTypes.NameIdentifier);
+                if (idClaim != null)
+                {
+                    loginInfo = new ExternalLoginInfo()
+                    {
+                        DefaultUserName = result.Identity.Name == null ? "" : result.Identity.Name.Replace(" ", ""),
+                        Login = new UserLoginInfo(idClaim.Issuer, idClaim.Value)
+                    };
+                }
+            }
+            return loginInfo;
         }
 
         protected override void Dispose(bool disposing)
@@ -445,6 +467,9 @@ namespace MyPhoneBook.Controllers
             public string LoginProvider { get; set; }
             public string ProviderKey { get; set; }
             public string UserName { get; set; }
+            //Added Email and Access_Token Property 
+            public string Email { get; set; }
+            public string Access_Token { get; set; }
 
             public IList<Claim> GetClaims()
             {
@@ -453,6 +478,8 @@ namespace MyPhoneBook.Controllers
 
                 if (UserName != null)
                 {
+                    claims.Add(new Claim("Google_AccessToken", Access_Token, null, LoginProvider));
+                    claims.Add(new Claim(ClaimTypes.Email, Email, null, LoginProvider));
                     claims.Add(new Claim(ClaimTypes.Name, UserName, null, LoginProvider));
                 }
 
@@ -483,7 +510,9 @@ namespace MyPhoneBook.Controllers
                 {
                     LoginProvider = providerKeyClaim.Issuer,
                     ProviderKey = providerKeyClaim.Value,
-                    UserName = identity.FindFirstValue(ClaimTypes.Name)
+                    UserName = identity.FindFirstValue(ClaimTypes.Name),
+                    Email = identity.FindFirstValue(ClaimTypes.Email),
+                    Access_Token = identity.FindFirstValue("Google_AccessToken")
                 };
             }
         }

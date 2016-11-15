@@ -19,6 +19,8 @@ namespace MyPhoneBook
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
+            var cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors(cors);
             // Web API routes
             config.MapHttpAttributeRoutes();
 
@@ -27,11 +29,7 @@ namespace MyPhoneBook
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-                    var cors = new EnableCorsAttribute(
-            origins: "*", 
-            headers: "*", 
-            methods: "*");
-        config.EnableCors(cors);
+       
         }
     }
 }

@@ -32,6 +32,8 @@ namespace MyPhoneBook.Models
         public bool HasRegistered { get; set; }
 
         public string LoginProvider { get; set; }
+
+        public string Access_Token { get; set; }
     }
 
     public class UserLoginInfoViewModel

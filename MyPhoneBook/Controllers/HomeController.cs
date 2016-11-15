@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace MyPhoneBook.Controllers
 {
+    [RequireHttps]
     public class HomeController : Controller
     {
         public ActionResult Index()
